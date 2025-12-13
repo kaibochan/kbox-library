@@ -125,8 +125,13 @@ void Shader::inspectUniforms() {
 		);
 		uniforms[i].name = name;
 		uniforms[i].location = glGetUniformLocation(program, name);
+		
+		glGetUniformIndices(program, 1, &name, &uniforms[i].index);
+		glGetActiveUniformsiv(program, 1, &uniforms[i].index, GL_UNIFORM_OFFSET, &uniforms[i].offset);
+
 		delete[] name;
 
+		active_uniforms.insert({ uniforms[i].name, &uniforms[i] });
 		uniformLoc.insert({ uniforms[i].name, uniforms[i].location });
 	}
 }

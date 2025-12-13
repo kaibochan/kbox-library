@@ -92,10 +92,12 @@ void Window::unloadScene(Scene* scene) {
 		}
 	}
 
+#ifdef _DEBUG
 	if (!scene_unloaded) {
 		std::cerr << "ERROR::Scene has not been registered with Window [" << this << ", "
 			<< glfwGetWindowTitle(window_handle) << "]" << std::endl;
 	}
+#endif // _DEBUG
 }
 
 
@@ -139,6 +141,10 @@ int Window::getWidth() {
 
 int Window::getHeight() {
 	return height;
+}
+
+float Window::getAspectRatio() {
+	return width / (float)height;
 }
 
 void Window::register_scroll_callback(Events::Scroll* callback) {

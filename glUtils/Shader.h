@@ -1,7 +1,7 @@
 #pragma once
 
 #ifndef __gl_h_
-#include <glad/glad.h>
+#include <glad/gl.h>
 #endif
 
 #include <string>
@@ -14,6 +14,8 @@ struct GLVar {
 	GLint size;
 	GLenum type;
 
+	GLuint index;
+	GLint offset;
 	GLint location;
 };
 
@@ -31,6 +33,8 @@ private:
 	void inspectUniforms();
 
 public:
+	std::map<std::string, const GLVar *const> active_uniforms;
+
 	std::map<std::string, GLint> uniformLoc;
 	std::map<std::string, GLint> attributeLoc;
 

@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -116,14 +116,22 @@
       <AdditionalDependencies>OpenAL32.lib;alsoft.common.lib;alsoft.excommon.lib;libsndfile-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+    <PreLinkEvent>
       <Command>echo "Copying OpenAL32.dll..."
 copy "C:\Libraries\OpenAL\Lib\OpenAL32.dll" "$(OutDir)"
 echo "OpenAL32.dll copied"
 echo "Copying libsndfile-1.dll..."
 copy "C:\Libraries\OpenAL\Lib\libsndfile-1.dll" "$(OutDir)"
 echo "libsndfile-1.dll copied"</Command>
+    </PreLinkEvent>
+    <PreLinkEvent>
       <Message>Copy DLLs to build directory</Message>
-    </PostBuildEvent>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -147,14 +155,22 @@ echo "libsndfile-1.dll copied"</Command>
       <AdditionalDependencies>OpenAL32.lib;alsoft.common.lib;alsoft.excommon.lib;libsndfile-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+    <PreLinkEvent>
       <Command>echo "Copying OpenAL32.dll..."
 copy "C:\Libraries\OpenAL\Lib\OpenAL32.dll" "$(OutDir)"
 echo "OpenAL32.dll copied"
 echo "Copying libsndfile-1.dll..."
 copy "C:\Libraries\OpenAL\Lib\libsndfile-1.dll" "$(OutDir)"
 echo "libsndfile-1.dll copied"</Command>
+    </PreLinkEvent>
+    <PreLinkEvent>
       <Message>Copy DLLs to build directory</Message>
-    </PostBuildEvent>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -174,16 +190,24 @@ echo "libsndfile-1.dll copied"</Command>
       <AdditionalDependencies>OpenAL32.lib;alsoft.common.lib;alsoft.excommon.lib;libsndfile-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+    <PreLinkEvent>
       <Command>echo "Copying OpenAL32.dll..."
 copy "C:\Libraries\OpenAL\Lib\OpenAL32.dll" "$(OutDir)"
 echo "OpenAL32.dll copied"
 echo "Copying libsndfile-1.dll..."
 copy "C:\Libraries\OpenAL\Lib\libsndfile-1.dll" "$(OutDir)"
 echo "libsndfile-1.dll copied"</Command>
-    </PostBuildEvent>
-    <PostBuildEvent>
+    </PreLinkEvent>
+    <PreLinkEvent>
       <Message>Copy DLLs to build directory</Message>
-    </PostBuildEvent>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -207,14 +231,22 @@ echo "libsndfile-1.dll copied"</Command>
       <AdditionalDependencies>OpenAL32.lib;alsoft.common.lib;alsoft.excommon.lib;libsndfile-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+    <PreLinkEvent>
       <Command>echo "Copying OpenAL32.dll..."
 copy "C:\Libraries\OpenAL\Lib\OpenAL32.dll" "$(OutDir)"
 echo "OpenAL32.dll copied"
 echo "Copying libsndfile-1.dll..."
 copy "C:\Libraries\OpenAL\Lib\libsndfile-1.dll" "$(OutDir)"
 echo "libsndfile-1.dll copied"</Command>
+    </PreLinkEvent>
+    <PreLinkEvent>
       <Message>Copy DLLs to build directory</Message>
-    </PostBuildEvent>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,7 @@
 #include "Context.h"
 
 #include <AL/al.h>
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 #include "Engine.h"
 #include "Window.h"
@@ -71,7 +71,8 @@ Window* Context::createWindow(int width, int height, const char* title,
 	glfwMakeContextCurrent(window_handle);
 
 	// Load OpenGL functions
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+	
+	if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress)) {
 		Engine::notify(kbox::GLAD_LOADER_FAILED);
 		return NULL;
 	}
