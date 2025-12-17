@@ -10,6 +10,10 @@
 using namespace kbox;
 
 void Window::setCallbacks() {
+	for (int i = 1; i < Events::NUM_TYPES; i++) {
+		callbacks.insert({ (Events::Type)i, std::list<Events::Hook*>() });
+	}
+	
 	glfwSetWindowCloseCallback(window_handle, Window::G_window_close_callback);
 	glfwSetFramebufferSizeCallback(window_handle, Window::G_framebuffer_size_callback);
 	glfwSetScrollCallback(window_handle, Window::G_scroll_callback);
@@ -147,67 +151,15 @@ float Window::getAspectRatio() {
 	return width / (float)height;
 }
 
-void Window::register_scroll_callback(Events::Scroll* callback) {
-	scroll_callbacks.push_back(callback);
-
-#ifdef _DEBUG
-	std::cout << "Window [" << this
-		<< "] registered scroll_callback [" << callback << "]" << std::endl;
-#endif // _DEBUG
+void Window::register_callback(Events::Hook* callback) {
+	callbacks[callback->getType()].push_back(callback);
 }
 
-void Window::register_cursor_pos_callback(Events::CursorPos* callback) {
-	cursor_pos_callbacks.push_back(callback);
-
-#ifdef _DEBUG
-	std::cout << "Window [" << this
-		<< "] registered cursor_pos_callback [" << callback << "]" << std::endl;
-#endif // _DEBUG
-}
-
-void Window::register_key_callback(Events::Key* callback) {
-	key_callbacks.push_back(callback);
-
-#ifdef _DEBUG
-	std::cout << "Window [" << this
-		<< "] registered key_callback [" << callback << "]" << std::endl;
-#endif // _DEBUG
-}
-
-void Window::remove_scroll_callback(Events::Scroll* callback) {
-	auto it = std::find(scroll_callbacks.begin(), scroll_callbacks.end(), callback);
-	if (it != scroll_callbacks.end()) {
-		scroll_callbacks.erase(it);
-
-#ifdef _DEBUG
-		std::cout << "Window [" << this
-			<< "] unregistered scroll_callback [" << callback << "]" << std::endl;
-#endif // _DEBUG
-	}
-}
-
-void Window::remove_cursor_pos_callback(Events::CursorPos* callback) {
-	auto it = std::find(cursor_pos_callbacks.begin(), cursor_pos_callbacks.end(), callback);
-	if (it != cursor_pos_callbacks.end()) {
-		cursor_pos_callbacks.erase(it);
-
-#ifdef _DEBUG
-		std::cout << "Window [" << this
-			<< "] unregistered cursor_pos_callback [" << callback << "]" << std::endl;
-#endif // _DEBUG
-	}
-}
-
-void Window::remove_key_callback(Events::Key* callback) {
-	auto it = std::find(key_callbacks.begin(), key_callbacks.end(), callback);
-	if (it != key_callbacks.end()) {
-		key_callbacks.erase(it);
-
-#ifdef _DEBUG
-		std::cout << "Window [" << this
-			<< "] unregistered key_callback [" << callback << "]" << std::endl;
-#endif // _DEBUG
-	}
+void Window::remove_callback(Events::Hook* callback) {
+	std::list<Events::Hook*> group = callbacks[callback->getType()];
+	auto it = std::find(group.begin(), group.end(), callback);
+	if (it != group.end())
+		group.erase(it);
 }
 
 void Window::G_window_close_callback(GLFWwindow* window_handle) {
@@ -229,6 +181,11 @@ void Window::G_framebuffer_size_callback(GLFWwindow* window_handle, int width, i
 	glfwMakeContextCurrent(prev_context);
 
 	glfwGetWindowSize(window_handle, &(window->width), &(window->height));
+
+	for (auto callback : window->callbacks[Events::FRAMEBUFFER_SIZE]) {
+		if (!callback->getScene() || callback->getScene()->getStatus() == Scene::ACTIVE)
+			(*reinterpret_cast<Events::Scroll*>(callback))(window_handle, width, height);
+	}
 }
 
 void Window::G_scroll_callback(GLFWwindow* window_handle, double xOffset, double yOffset) {
@@ -236,9 +193,9 @@ void Window::G_scroll_callback(GLFWwindow* window_handle, double xOffset, double
 	if (!window)
 		return;
 
-	for (auto callback : window->scroll_callbacks) {
+	for (auto callback : window->callbacks[Events::SCROLL]) {
 		if (!callback->getScene() || callback->getScene()->getStatus() == Scene::ACTIVE)
-			(*callback)(window_handle, xOffset, yOffset);
+			(*reinterpret_cast<Events::Scroll*>(callback))(window_handle, xOffset, yOffset);
 	}
 }
 
@@ -247,9 +204,9 @@ void Window::G_cursor_position_callback(GLFWwindow* window_handle, double xPos, 
 	if (!window)
 		return;
 
-	for (auto callback : window->cursor_pos_callbacks) {
+	for (auto callback : window->callbacks[Events::CURSORPOS]) {
 		if (!callback->getScene() || callback->getScene()->getStatus() == Scene::ACTIVE)
-			(*callback)(window_handle, xPos, yPos);
+			(*reinterpret_cast<Events::CursorPos*>(callback))(window_handle, xPos, yPos);
 	}
 }
 
@@ -258,8 +215,8 @@ void Window::G_key_callback(GLFWwindow* window_handle, int key, int scancode, in
 	if (!window)
 		return;
 
-	for (auto callback : window->key_callbacks) {
+	for (auto callback : window->callbacks[Events::KEY]) {
 		if (!callback->getScene() || callback->getScene()->getStatus() == Scene::ACTIVE)
-			(*callback)(window_handle, key, scancode, action, mods);
+			(*reinterpret_cast<Events::Key*>(callback))(window_handle, key, scancode, action, mods);
 	}
 }
