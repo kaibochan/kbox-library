@@ -1,6 +1,6 @@
 #include "Window.h"
 
-#include "Context.h"
+#include "Engine.h"
 #include "Scene.h"
 
 #ifdef _DEBUG
@@ -31,16 +31,18 @@ Window::Window(GLFWwindow* window_handle) {
 Window::~Window() {
 	GLFWwindow* previous_context = glfwGetCurrentContext();
 	glfwMakeContextCurrent(window_handle);
+	
 	for (auto it = scenes.begin(); it != scenes.end();) {
 		(*it)->terminate();
 
 #ifdef _DEBUG
-
+		std::cout << "Terminating scene [" << *it << "]" << std::endl;
 #endif // _DEBUG
 
 		delete *it;
 		it = scenes.erase(it);
 	}
+
 	glfwMakeContextCurrent(previous_context);
 	glfwDestroyWindow(window_handle);
 }
@@ -156,10 +158,13 @@ void Window::register_callback(Events::Hook* callback) {
 }
 
 void Window::remove_callback(Events::Hook* callback) {
-	std::list<Events::Hook*> group = callbacks[callback->getType()];
-	auto it = std::find(group.begin(), group.end(), callback);
-	if (it != group.end())
-		group.erase(it);
+	std::list<Events::Hook*>& group = callbacks[callback->getType()];
+#ifdef _DEBUG
+	std::cout << "Removed callback [" << callback << "], "
+		<< "Type: " << callback->getType() << std::endl;
+#endif //_DEBUG
+
+	group.remove(callback);
 }
 
 void Window::G_window_close_callback(GLFWwindow* window_handle) {
@@ -167,7 +172,7 @@ void Window::G_window_close_callback(GLFWwindow* window_handle) {
 	if (!window)
 		return;
 
-	window->parent->closeWindow(window);
+	Engine::closeWindow(window);
 }
 
 void Window::G_framebuffer_size_callback(GLFWwindow* window_handle, int width, int height) {
@@ -177,14 +182,14 @@ void Window::G_framebuffer_size_callback(GLFWwindow* window_handle, int width, i
 
 	GLFWwindow* prev_context = glfwGetCurrentContext();
 	glfwMakeContextCurrent(window->window_handle);
+
+	glfwGetWindowSize(window_handle, &(window->width), &(window->height));
 	glViewport(0, 0, width, height);
 	glfwMakeContextCurrent(prev_context);
 
-	glfwGetWindowSize(window_handle, &(window->width), &(window->height));
-
 	for (auto callback : window->callbacks[Events::FRAMEBUFFER_SIZE]) {
 		if (!callback->getScene() || callback->getScene()->getStatus() == Scene::ACTIVE)
-			(*reinterpret_cast<Events::Scroll*>(callback))(window_handle, width, height);
+			(*reinterpret_cast<Events::Framebuffer_Size*>(callback))(window_handle, width, height);
 	}
 }
 

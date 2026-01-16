@@ -1,7 +1,9 @@
 #pragma once
 
 #include <Components/Transform.h>
+#include <engine/Camera.h>
 
+#include <glUtils/Render.h>
 #include <glUtils/Mesh.h>
 #include <glUtils/Shader.h>
 
@@ -11,7 +13,7 @@
 
 // TODO: Implement proper destructor and cleanup of GL data
 
-class Model {
+class Model : public Render {
 public:
 	Transform transform;
 
@@ -26,5 +28,5 @@ public:
 	Model();
 	~Model();
 	
-	virtual void render(Shader &shader) const;
+	virtual void render(Shader* shader) const override;
 };

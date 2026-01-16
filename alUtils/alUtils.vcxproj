@@ -201,9 +201,9 @@ echo "libsndfile-1.dll copied"</Command>
       <Command>echo "Copying OpenAL32.dll..."
 copy "C:\Libraries\OpenAL\Lib\OpenAL32.dll" "$(OutDir)"
 echo "OpenAL32.dll copied"
-echo "Copying libsndfile-1.dll..."
-copy "C:\Libraries\OpenAL\Lib\libsndfile-1.dll" "$(OutDir)"
-echo "libsndfile-1.dll copied"</Command>
+echo "Copying sndfile.dll..."
+copy "C:\Libraries\OpenAL\Lib\sndfile.dll" "$(OutDir)"
+echo "sndfile.dll copied"</Command>
     </PreLinkEvent>
     <PreLinkEvent>
       <Message>Copy DLLs to build directory</Message>

@@ -9,6 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.h"
+#include "Render.h"
 
 #include <vector>
 
@@ -22,7 +23,7 @@ struct Texture {
 	unsigned int id;
 };
 
-class Mesh {
+class Mesh : public Render {
 private:
 	unsigned int VAO, VBO, EBO;
 
@@ -39,5 +40,5 @@ public:
 	Mesh(const std::vector<Vertex> &vertices,
 		const std::vector<unsigned int> &indices, const std::vector<Texture> &textures);
 
-	void render(Shader &shader) const;
+	void render(Shader* shader) const override;
 };

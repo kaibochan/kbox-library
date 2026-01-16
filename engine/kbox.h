@@ -2,7 +2,6 @@
 
 namespace kbox {
 	class Engine;
-	class Context;
 	class Window;
 	class Scene;
 

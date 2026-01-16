@@ -30,6 +30,7 @@ protected:
 	kbox::Scene* scene;
 	
 	void hook(void* obj_handle, kbox::Window* window, kbox::Scene* scene = NULL);
+	void hook(void* obj_handle, kbox::Scene* scene);
 
 public:
 	Type getType();
@@ -49,6 +50,10 @@ public:
 		void* obj_handle, kbox::Window* window,
 		void (*callback)(void* obj_handle, GLFWwindow* window_handle, int width, int height),
 		kbox::Scene* scene = NULL
+	);
+	void hook(
+		void* obj_handle, kbox::Scene* scene,
+		void (*callback)(void* obj_handle, GLFWwindow* window_handle, int width, int height)
 	);
 
 	void operator()(GLFWwindow* window_handle, int width, int height);

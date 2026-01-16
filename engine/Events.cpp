@@ -1,6 +1,7 @@
 #include "Events.h"
 
 #include "Window.h"
+#include "Scene.h"
 
 using namespace Events;
 
@@ -19,11 +20,16 @@ void Hook::hook(void* obj_handle, kbox::Window* window, kbox::Scene* scene) {
 	window->register_callback(this);
 }
 
+void Hook::hook(void* obj_handle, kbox::Scene* scene) {
+	hook(obj_handle, scene->getWindow(), scene);
+}
+
 void Hook::unhook() {
 	window->remove_callback(this);
 }
 
 Type Hook::getType() { return type; }
+
 
 /***************
 * Framebuffer_Size

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "kbox.h"
 #include <GLFW/glfw3.h>
 
 #include "kbox.h"
@@ -17,6 +18,8 @@ public:
 	void resume();
 	void suspend();
 	Status getStatus() const;
+
+	Window* getWindow() const;
 
 protected:
 	Window* window;

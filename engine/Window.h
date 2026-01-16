@@ -28,15 +28,6 @@ public:
 	void register_callback(Events::Hook* callback);
 	void remove_callback(Events::Hook* callback);
 
-	//void register_scroll_callback(Events::Scroll* callback);
-	//void remove_scroll_callback(Events::Scroll* callback);
-
-	//void register_cursor_pos_callback(Events::CursorPos* callback);
-	//void remove_cursor_pos_callback(Events::CursorPos* callback);
-
-	//void register_key_callback(Events::Key* callback);
-	//void remove_key_callback(Events::Key* callback);
-
 	GLFWwindow* getWindowHandle();
 
 	int getWidth();
@@ -44,16 +35,12 @@ public:
 	float getAspectRatio();
 
 private:
-	Context* parent;
 	GLFWwindow* window_handle;
 
 	Scene* current_scene;
 	std::list<Scene*> scenes;
 
 	std::map<Events::Type, std::list<Events::Hook*>> callbacks;
-	/*std::list<Events::Scroll*> scroll_callbacks;
-	std::list<Events::CursorPos*> cursor_pos_callbacks;
-	std::list<Events::Key*> key_callbacks;*/
 
 	int width, height;
 
@@ -67,6 +54,5 @@ private:
 
 	void render(double deltaTime);
 
-	friend class Context;
-	//friend class Events::Hook;
+	friend class Engine;
 };

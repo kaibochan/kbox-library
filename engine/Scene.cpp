@@ -48,3 +48,7 @@ void Scene::suspend() {
 Scene::Status Scene::getStatus() const {
 	return status;
 }
+
+Window* Scene::getWindow() const {
+	return window;
+}
