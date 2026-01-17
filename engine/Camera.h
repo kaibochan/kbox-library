@@ -12,8 +12,6 @@
 #include <glm/ext.hpp>
 #include <GLFW/glfw3.h>
 
-// TODO: implement framebuffer_size_callback to fix aspect ratio
-
 class Camera {
 public:
 	glm::vec3 position;
@@ -34,9 +32,9 @@ public:
 
 	virtual glm::mat4 getProjection();
 
-	//// Handles setting appropriate uniforms for camera
-	//void render(Shader& shader);
-	//void render(Shader& shader, glm::mat4 man_projection);
+	// handles setting appropriate uniforms for camera
+	void apply(Shader* shader);
+	void apply(Shader* shader, glm::mat4 man_projection);
 
 protected:
 	virtual void updateAspect(float aspect);

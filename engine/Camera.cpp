@@ -40,25 +40,25 @@ void Camera::G_framebuffer_size_callback(void* obj_handle, GLFWwindow* handle, i
 	camera->updateAspect(win_width / (float)win_height);
 }
 
-//void Camera::render(Shader& shader) {
-//	shader.use();
-//
-//	glUniformMatrix4fv(shader.uniformLoc["projection"], 1, GL_FALSE,
-//		glm::value_ptr(getProjection()));
-//
-//	glUniformMatrix4fv(shader.uniformLoc["view"], 1, GL_FALSE,
-//		glm::value_ptr(getView()));
-//}
-//
-//void Camera::render(Shader& shader, glm::mat4 man_projection) {
-//	shader.use();
-//
-//	glUniformMatrix4fv(shader.uniformLoc["projection"], 1, GL_FALSE,
-//		glm::value_ptr(man_projection));
-//
-//	glUniformMatrix4fv(shader.uniformLoc["view"], 1, GL_FALSE,
-//		glm::value_ptr(getView()));
-//}
+void Camera::apply(Shader* shader) {
+	shader->use();
+
+	glUniformMatrix4fv(shader->uniformLoc["projection"], 1, GL_FALSE,
+		glm::value_ptr(getProjection()));
+
+	glUniformMatrix4fv(shader->uniformLoc["view"], 1, GL_FALSE,
+		glm::value_ptr(getView()));
+}
+
+void Camera::apply(Shader* shader, glm::mat4 man_projection) {
+	shader->use();
+
+	glUniformMatrix4fv(shader->uniformLoc["projection"], 1, GL_FALSE,
+		glm::value_ptr(man_projection));
+
+	glUniformMatrix4fv(shader->uniformLoc["view"], 1, GL_FALSE,
+		glm::value_ptr(getView()));
+}
 
 PerspectiveCamera::PerspectiveCamera(Window* window, Scene* scene)
 	: Camera(window, scene), fov(glm::radians(30.0f)) {}
