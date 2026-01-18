@@ -12,6 +12,7 @@ namespace Events {
 		SCROLL,
 		CURSORPOS,
 		KEY,
+		TIMER,
 		NUM_TYPES
 	};
 
@@ -20,6 +21,7 @@ namespace Events {
 	struct Scroll;
 	struct CursorPos;
 	struct Key;
+	struct Timer;
 }
 
 struct Events::Hook {
@@ -28,6 +30,7 @@ protected:
 	void* obj_handle;
 	kbox::Window* window;
 	kbox::Scene* scene;
+	bool active_status;
 	
 	void hook(void* obj_handle, kbox::Window* window, kbox::Scene* scene = NULL);
 	void hook(void* obj_handle, kbox::Scene* scene);
@@ -36,6 +39,10 @@ public:
 	Type getType();
 	kbox::Scene const* getScene();
 	void unhook();
+
+	bool active();
+	void activate();
+	void deactivate();
 };
 
 struct Events::Framebuffer_Size : Hook {
@@ -50,10 +57,6 @@ public:
 		void* obj_handle, kbox::Window* window,
 		void (*callback)(void* obj_handle, GLFWwindow* window_handle, int width, int height),
 		kbox::Scene* scene = NULL
-	);
-	void hook(
-		void* obj_handle, kbox::Scene* scene,
-		void (*callback)(void* obj_handle, GLFWwindow* window_handle, int width, int height)
 	);
 
 	void operator()(GLFWwindow* window_handle, int width, int height);
@@ -105,4 +108,27 @@ public:
 		kbox::Scene* scene = NULL);
 
 	void operator()(GLFWwindow* window_handle, int key, int scancode, int action, int mods);
+};
+
+struct Events::Timer : Hook {
+private:
+	double time_started;
+
+	void (*callback)(void* obj_handle,
+		GLFWwindow* window_handle, double time) = 0;
+
+	Timer();
+
+public:
+	double delta;
+
+	Timer(double delta);
+	void start();
+
+	void hook(
+		void* obj_handle, kbox::Window* window,
+		void (*callback)(void* obj_handle, GLFWwindow* window_handle, double time),
+		kbox::Scene* scene = NULL);
+
+	void operator()(GLFWwindow* window_handle, double time);
 };

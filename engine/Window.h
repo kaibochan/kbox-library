@@ -49,6 +49,7 @@ private:
 	static void G_scroll_callback(GLFWwindow* window_handle, double xOffset, double yOffset);
 	static void G_cursor_position_callback(GLFWwindow* window_handle, double xPos, double yPos);
 	static void G_key_callback(GLFWwindow* window_handle, int key, int scancode, int action, int mods);
+	static void G_timer_callback(GLFWwindow* window_handle, double time);
 
 	void setCallbacks();
 

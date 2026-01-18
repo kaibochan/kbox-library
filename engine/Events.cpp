@@ -16,6 +16,7 @@ void Hook::hook(void* obj_handle, kbox::Window* window, kbox::Scene* scene) {
 	this->obj_handle = obj_handle;
 	this->window = window;
 	this->scene = scene;
+	this->active_status = true;
 
 	window->register_callback(this);
 }
@@ -29,6 +30,10 @@ void Hook::unhook() {
 }
 
 Type Hook::getType() { return type; }
+
+bool Hook::active() { return active_status; }
+void Hook::activate() { active_status = true; }
+void Hook::deactivate() { active_status = false; }
 
 
 /***************
@@ -46,7 +51,8 @@ void Framebuffer_Size::hook(void* obj_handle, kbox::Window* window,
 }
 
 void Framebuffer_Size::operator()(GLFWwindow* window_handle, int width, int height) {
-	(*callback)(obj_handle, window_handle, width, height);
+	if (active())
+		(*callback)(obj_handle, window_handle, width, height);
 }
 
 /***************
@@ -64,7 +70,8 @@ void Scroll::hook(
 }
 
 void Scroll::operator()(GLFWwindow* window_handle, double xOffset, double yOffset) {
-	(*callback)(obj_handle, window_handle, xOffset, yOffset);
+	if (active())
+		(*callback)(obj_handle, window_handle, xOffset, yOffset);
 }
 
 /***************
@@ -81,7 +88,8 @@ void CursorPos::hook(void* obj_handle, kbox::Window* window,
 }
 
 void CursorPos::operator()(GLFWwindow* window_handle, double xPos, double yPos) {
-	(*callback)(obj_handle, window_handle, xPos, yPos);
+	if (active())
+		(*callback)(obj_handle, window_handle, xPos, yPos);
 }
 
 /***************
@@ -98,5 +106,34 @@ void Key::hook(void* obj_handle, kbox::Window* window,
 }
 
 void Key::operator()(GLFWwindow* window_handle, int key, int scancode, int action, int mods) {
-	(*callback)(obj_handle, window_handle, key, scancode, action, mods);
+	if (active())
+		(*callback)(obj_handle, window_handle, key, scancode, action, mods);
 }
+
+/***************
+* Timer
+***************/
+Timer::Timer() : delta(0.0), time_started(0.0) { type = TIMER; }
+Timer::Timer(double delta) : Timer() { this->delta = delta; }
+
+void Timer::start() {
+	time_started = glfwGetTime();
+	activate();
+}
+
+void Timer::hook(void* obj_handle, kbox::Window* window,
+	void (*callback)(void* obj_handle, GLFWwindow* window_handle, double time),
+	kbox::Scene* scene) {
+
+	this->callback = callback;
+	Hook::hook(obj_handle, window, scene);
+}
+
+void Timer::operator()(GLFWwindow* window_handle, double time) {
+	if (time < time_started + delta || !active())
+		return;
+
+	deactivate();
+	(*callback)(obj_handle, window_handle, time);
+}
+	

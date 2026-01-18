@@ -225,3 +225,17 @@ void Window::G_key_callback(GLFWwindow* window_handle, int key, int scancode, in
 			(*reinterpret_cast<Events::Key*>(callback))(window_handle, key, scancode, action, mods);
 	}
 }
+
+void Window::G_timer_callback(GLFWwindow* window_handle, double time) {
+	Window* window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window_handle));
+	if (!window)
+		return;
+
+	for (auto callback : window->callbacks[Events::TIMER]) {
+		if (!callback->active())
+			continue;
+
+		if (!callback->getScene() || callback->getScene()->getStatus() == Scene::ACTIVE)
+			(*(Events::Timer*)callback)(window_handle, time);
+	}
+}

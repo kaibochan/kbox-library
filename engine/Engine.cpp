@@ -151,5 +151,12 @@ void Engine::run() {
 		}
 
 		glfwPollEvents();
+		pollTimerEvents();
+	}
+}
+
+void Engine::pollTimerEvents() {	
+	for (auto it = windows.begin(); it != windows.end(); it++) {
+		Window::G_timer_callback((*it)->getWindowHandle(), glfwGetTime());
 	}
 }
