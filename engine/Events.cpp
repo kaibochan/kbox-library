@@ -127,6 +127,9 @@ void Timer::hook(void* obj_handle, kbox::Window* window,
 
 	this->callback = callback;
 	Hook::hook(obj_handle, window, scene);
+
+	// Do not activate timers by default, user must call start()
+	deactivate();
 }
 
 void Timer::operator()(GLFWwindow* window_handle, double time) {
