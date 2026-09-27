@@ -3,6 +3,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#ifdef _DEBUG
+#include <iostream>
+#endif //_DEBUG
+
 Text::Text(BitmapFont* font, unsigned int VAO, unsigned int VBO, unsigned int EBO,
 	unsigned int num_indices, unsigned int iVBO, unsigned int num_instances) {
 
@@ -18,6 +22,11 @@ Text::Text(BitmapFont* font, unsigned int VAO, unsigned int VBO, unsigned int EB
 }
 
 Text::~Text() {
+#ifdef _DEBUG
+	/*std::cout << "Deallocating Mesh : [" << this << "]" << std::endl
+		<< "VAO, VBO, EBO : [" << VAO << "], [" << VBO << "], [" << EBO << "]" << std::endl;*/
+#endif //_DEBUG
+
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);

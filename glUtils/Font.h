@@ -10,6 +10,9 @@
 #include <string>
 #include <map>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 class BitmapFont {
 private:
 	unsigned int texture_ID;
@@ -48,4 +51,14 @@ public:
 
 	static void loadFont(std::string fontName);
 	static BitmapFont* getFont(std::string fontName);
+};
+
+
+class Font {
+	static FT_Library library;	
+	FT_Face face;
+
+public:
+	static FT_Error initLibrary();
+	FT_Error loadFace(const char* file_path);
 };

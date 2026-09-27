@@ -1,5 +1,9 @@
 #include "Font.h"
 
+#ifdef _DEBUG
+#include <iostream>
+#endif //_DEBUG
+
 std::map<std::string, BitmapFont::Info> BitmapFont::fonts_info = {
 	{"kfont", BitmapFont::Info {
 		"kfont", "./Assets/font.bmp", 6, 10, 32, 126,
@@ -83,4 +87,30 @@ glm::mat3 BitmapFont::getFontTransform() {
 	font_transform[2][2] = 1.f;
 
 	return font_transform;
+}
+
+
+
+
+
+FT_Library Font::library;
+
+FT_Error Font::initLibrary() {
+	FT_Error error = FT_Init_FreeType(&library);
+#ifdef _DEBUG
+	if (error)
+		std::cerr << "Unable to initialize FreeType: " << error << std::endl;
+#endif //_DEBUG
+	return error;
+}
+
+FT_Error Font::loadFace(const char* file_path) {
+	FT_Error error = FT_New_Face(library, file_path, 0, &face);
+#ifdef _DEBUG
+	if (error == FT_Err_Unknown_File_Format)
+		std::cerr << "Font [" << file_path << "] of unknown format" << std::endl;
+	else if (error)
+		std::cerr << "Font [" << file_path << "] could not be loaded: " << error << std::endl;
+#endif //_DEBUG
+	return error;
 }
