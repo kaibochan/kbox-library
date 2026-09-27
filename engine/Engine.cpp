@@ -3,23 +3,11 @@
 #include "Window.h"
 
 #ifdef _DEBUG
-#include "Memory.h"
 #include <iostream>
 #endif //_DEBUG
 
-// Use GPU instead of integrated graphics
-#ifdef WIN32
-#include <Windows.h>
-extern "C" {
-	__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
-	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
-}
-#endif //_WIN32
-
 using namespace kbox;
 
-//std::list<Context*> Engine::contexts;
-//Context* Engine::current_context;
 Error Engine::error_state;
 
 std::list<Window*> Engine::windows;
